@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookService {
@@ -57,7 +58,6 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
     public Result<PageResult> getBookList(Integer currentPageCount) {
         // 查询条件
         LambdaQueryWrapper<Book> wrapper = new LambdaQueryWrapper<Book>()
-                .select(Book::getBookName,Book::getBookAuthor,Book::getBookISBN,Book::getBookImg)
                 .eq(Book::getUserId,UserHolder.getUser());
         Page<Book> page = Page.of(currentPageCount, 10);
         // 查询
@@ -73,11 +73,35 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
     @Override
     public Result<List<Book>> getBookByName(String bookName) {
         LambdaQueryWrapper<Book> wrapper = new LambdaQueryWrapper<Book>()
-                .select(Book::getBookName,Book::getBookAuthor,Book::getBookISBN,Book::getBookImg)
                 .eq(Book::getUserId,UserHolder.getUser())
                 .like(Book::getBookName,bookName);
         List<Book> list = this.list(wrapper);
         return Result.success(list,null);
+    }
+
+    /**
+     * 修改书本信息
+     */
+    @Override
+    public Result updateBook(BookDto bookDto) {
+        Book book = new Book();
+        if (bookDto.getBookName() == null || bookDto.getBookAuthor() == null || bookDto.getBookId() == null || bookDto.getUserId() == null ){
+            return Result.error("信息不完整");
+        }
+        Integer userId = UserHolder.getUser();
+        if (!userId.equals(bookDto.getUserId())){
+            return Result.error("不能修改他人的书籍");
+        }
+        if (bookDto.getBookImg()!= null){
+            String urlImg = saveImg(bookDto.getBookImg());
+            book.setBookImg(urlImg);
+        }
+        book.setBookId(bookDto.getBookId());
+        book.setBookName(bookDto.getBookName());
+        book.setBookAuthor(bookDto.getBookAuthor());
+        book.setBookISBN(bookDto.getBookISBN());
+        this.updateById(book);
+        return Result.success(null,"修改成功");
     }
 
     /**

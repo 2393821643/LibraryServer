@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @TableName("tb_book")
 public class Book {
-    @TableId(value="user_id", type= IdType.AUTO)
+    @TableId(value="book_id", type= IdType.AUTO)
     private Integer bookId;
     @TableField("book_name")
     private String bookName;

@@ -10,8 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 @ToString
 @Builder
 public class BookDto {
+    private Integer bookId;
     private String bookName;
     private String bookAuthor;
     private String bookISBN;
+    private Integer userId;
     private MultipartFile bookImg;
 }

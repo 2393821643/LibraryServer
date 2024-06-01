@@ -38,4 +38,12 @@ public class BookController {
         return bookService.getBookByName(bookName);
     }
 
+    /**
+     *  修改书本
+     */
+    @PutMapping
+    private Result updateBook(BookDto bookDto){
+        return bookService.updateBook(bookDto);
+    }
+
 }

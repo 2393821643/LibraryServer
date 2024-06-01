@@ -23,4 +23,9 @@ public interface BookService extends IService<Book> {
      *  书本模糊查询
      */
     Result<List<Book>> getBookByName(String bookName);
+
+    /**
+     * 修改书本信息
+     */
+    Result updateBook(BookDto bookDto);
 }
