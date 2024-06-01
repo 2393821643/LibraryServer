@@ -37,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             user = User.builder()
                     .openId(openId)
                     .build();
-            int id = baseMapper.insert(user);
+            save(user);
         }
         // 返回token
         String token = jwtUtil.createToken(user.getId());

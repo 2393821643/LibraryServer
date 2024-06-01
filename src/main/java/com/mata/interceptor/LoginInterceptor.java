@@ -4,6 +4,7 @@ package com.mata.interceptor;
 import cn.hutool.core.util.StrUtil;
 
 import cn.hutool.json.JSONUtil;
+import com.mata.exception.BusinessException;
 import com.mata.util.JwtUtil;
 import com.mata.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("authorization");
         //1.1: 判断token是否为空
         if (StrUtil.isBlank(token)) {
-            return false;
+            throw new BusinessException("登录失败");
         }
         // 解析token 获取id
         Integer id = jwtUtil.parseToken(token);
         if (id == null){
-            return false;
+            throw new BusinessException("登录失败");
         }
         UserHolder.saveUser(id);
         return true;

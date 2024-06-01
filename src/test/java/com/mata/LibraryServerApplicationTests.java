@@ -1,5 +1,7 @@
 package com.mata;
 
+import com.mata.pojo.User;
+import com.mata.service.UserService;
 import com.mata.util.JwtUtil;
 import com.mata.util.WxUtil;
 import org.junit.jupiter.api.Test;
@@ -14,10 +16,14 @@ class LibraryServerApplicationTests {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserService userService;
     @Test
     void contextLoads() {
-        Integer i = jwtUtil.parseToken("eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjF9.unVvql5_3DYhvimNYiVO1NpXi2wHzifxihZ5fNKPA1y");
-        System.out.println(i);
+        User user = new User(null, "testopen");
+        userService.save(user);
+        System.out.println(user);
     }
 
 }
