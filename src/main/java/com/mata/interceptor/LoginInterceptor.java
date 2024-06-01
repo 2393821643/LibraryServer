@@ -25,12 +25,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("authorization");
         //1.1: 判断token是否为空
         if (StrUtil.isBlank(token)) {
-            throw new BusinessException("登录失败");
+            throw new BusinessException("未登录");
         }
         // 解析token 获取id
         Integer id = jwtUtil.parseToken(token);
         if (id == null){
-            throw new BusinessException("登录失败");
+            throw new BusinessException("未登录");
         }
         UserHolder.saveUser(id);
         return true;

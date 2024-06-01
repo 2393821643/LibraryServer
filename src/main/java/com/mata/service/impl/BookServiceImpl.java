@@ -1,8 +1,11 @@
 package com.mata.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mata.dao.BookDao;
 import com.mata.dto.BookDto;
+import com.mata.dto.PageResult;
 import com.mata.dto.Result;
 import com.mata.exception.BusinessException;
 import com.mata.pojo.Book;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookService {
@@ -44,6 +48,36 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
         // 保存书本信息
         save(book);
         return Result.success(null,"上传成功");
+    }
+
+    /**
+     *  添加书本
+     */
+    @Override
+    public Result<PageResult> getBookList(Integer currentPageCount) {
+        // 查询条件
+        LambdaQueryWrapper<Book> wrapper = new LambdaQueryWrapper<Book>()
+                .select(Book::getBookName,Book::getBookAuthor,Book::getBookISBN,Book::getBookImg)
+                .eq(Book::getUserId,UserHolder.getUser());
+        Page<Book> page = Page.of(currentPageCount, 10);
+        // 查询
+        Page<Book> resultPage = this.page(page, wrapper);
+        // 封装对象
+        PageResult pageResult = new PageResult(resultPage.getPages(), resultPage.getRecords());
+        return Result.success(pageResult,null);
+    }
+
+    /**
+     *  书本模糊查询
+     */
+    @Override
+    public Result<List<Book>> getBookByName(String bookName) {
+        LambdaQueryWrapper<Book> wrapper = new LambdaQueryWrapper<Book>()
+                .select(Book::getBookName,Book::getBookAuthor,Book::getBookISBN,Book::getBookImg)
+                .eq(Book::getUserId,UserHolder.getUser())
+                .like(Book::getBookName,bookName);
+        List<Book> list = this.list(wrapper);
+        return Result.success(list,null);
     }
 
     /**
