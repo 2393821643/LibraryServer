@@ -1,1 +1,30 @@
-spring.application.name=LibraryServer
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: library-server
+  datasource:
+    url: jdbc:mysql://${mata.mysql.ip}:${mata.mysql.port}/${mata.mysql.db}?useSSL=false
+    username: ${mata.mysql.username}
+    password: ${mata.mysql.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+
+jwt:
+  admin-secret-key: ${mata.jwt.admin-secret-key}
+  admin-ttl: ${mata.jwt.admin-ttl}
+
+tx-client:
+  secretId: ${mata.tx-client.secretId}
+  secretKey: ${mata.tx-client.secretKey}
+  regionName: ${mata.tx-client.regionName}
+  bucketName: ${mata.tx-client.bucketName}
+  fileMkdir: ${mata.tx-client.fileMkdir}
+
+wx:
+  appid: ${mata.wx.appid}
+  secret: ${mata.wx.secret}
