@@ -84,24 +84,39 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
      */
     @Override
     public Result updateBook(BookDto bookDto) {
-        Book book = new Book();
-        if (bookDto.getBookName() == null || bookDto.getBookAuthor() == null || bookDto.getBookId() == null || bookDto.getUserId() == null ){
+        // 校验数据
+        if (bookDto.getBookName() == null || bookDto.getBookAuthor() == null || bookDto.getBookId() == null){
             return Result.error("信息不完整");
         }
-        Integer userId = UserHolder.getUser();
-        if (!userId.equals(bookDto.getUserId())){
+        // 寻找此bookid
+        Book book = this.getById(bookDto.getBookId());
+        if (!UserHolder.getUser().equals(book.getUserId())){
             return Result.error("不能修改他人的书籍");
         }
-        if (bookDto.getBookImg()!= null){
-            String urlImg = saveImg(bookDto.getBookImg());
-            book.setBookImg(urlImg);
-        }
-        book.setBookId(bookDto.getBookId());
         book.setBookName(bookDto.getBookName());
         book.setBookAuthor(bookDto.getBookAuthor());
         book.setBookISBN(bookDto.getBookISBN());
+        // 如果需要修改图片
+        if (bookDto.getBookImg()!= null){
+            String url = saveImg(bookDto.getBookImg());
+            book.setBookImg(url);
+        }
         this.updateById(book);
         return Result.success(null,"修改成功");
+    }
+
+    /**
+     *  删除书本
+     */
+    @Override
+    public Result deleteBook(Integer bookId) {
+        // 寻找此bookid
+        Book book = this.getById(bookId);
+        if (!UserHolder.getUser().equals(book.getUserId())){
+            return Result.error("不能删除他人的书籍");
+        }
+        this.removeById(bookId);
+        return Result.success(null,"删除成功");
     }
 
     /**

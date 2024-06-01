@@ -28,4 +28,9 @@ public interface BookService extends IService<Book> {
      * 修改书本信息
      */
     Result updateBook(BookDto bookDto);
+
+    /**
+     *  删除书本
+     */
+    Result deleteBook(Integer bookId);
 }

@@ -26,7 +26,7 @@ public class BookController {
      *  获取书本分页
      */
     @GetMapping("/list/{page}")
-    private Result<PageResult> getBooksList(@PathVariable("page") Integer page){
+    public Result<PageResult> getBooksList(@PathVariable("page") Integer page){
         return bookService.getBookList(page);
     }
 
@@ -34,7 +34,7 @@ public class BookController {
      *  获取书本 模糊查询
      */
     @GetMapping("/{bookName}")
-    private Result<List<Book>> getBooksByName(@PathVariable("bookName") String bookName){
+    public Result<List<Book>> getBooksByName(@PathVariable("bookName") String bookName){
         return bookService.getBookByName(bookName);
     }
 
@@ -42,8 +42,16 @@ public class BookController {
      *  修改书本
      */
     @PutMapping
-    private Result updateBook(BookDto bookDto){
+    public Result updateBook(BookDto bookDto){
         return bookService.updateBook(bookDto);
+    }
+
+    /**
+     *  删除书本
+     */
+    @DeleteMapping("/{bookId}")
+    public Result deleteBook(@PathVariable("bookId") Integer bookId){
+        return bookService.deleteBook(bookId);
     }
 
 }
