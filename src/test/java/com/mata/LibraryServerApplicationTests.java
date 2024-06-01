@@ -1,6 +1,5 @@
 package com.mata;
 
-import com.mata.pojo.User;
 import com.mata.service.UserService;
 import com.mata.util.JwtUtil;
 import com.mata.util.WxUtil;
@@ -21,9 +20,6 @@ class LibraryServerApplicationTests {
     private UserService userService;
     @Test
     void contextLoads() {
-        User user = new User(null, "testopen");
-        userService.save(user);
-        System.out.println(user);
     }
 
 }

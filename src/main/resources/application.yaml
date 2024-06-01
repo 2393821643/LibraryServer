@@ -17,7 +17,8 @@ spring:
       max-file-size: 10MB
 
 
-
+file:
+  path: E:\temp\
 jwt:
   admin-secret-key: ${mata.jwt.admin-secret-key}
   admin-ttl: ${mata.jwt.admin-ttl}

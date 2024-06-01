@@ -13,6 +13,7 @@ import com.mata.service.BookService;
 import com.mata.util.CosClientUtil;
 import com.mata.util.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,8 @@ import java.util.Objects;
 public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookService {
     @Autowired
     private CosClientUtil cosClientUtil;
+    @Value("${file.path}")
+    private String tempFilePath;
 
     /**
      * 添加书本
@@ -128,7 +131,7 @@ public class BookServiceImpl extends ServiceImpl<BookDao, Book> implements BookS
         try {
             //将image转file 并写入本地
             byte[] fileBytes = image.getBytes();
-            File convertedFile = new File("src/main/resources/static/images/" + image.getOriginalFilename());
+            File convertedFile = new File(tempFilePath + image.getOriginalFilename());
             FileOutputStream fos = new FileOutputStream(convertedFile);
             fos.write(fileBytes);
             fos.close();
